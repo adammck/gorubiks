@@ -125,3 +125,17 @@ func(cube Cube) facesOn(side Side) [9]Face {
 
   return faces
 }
+
+func (cube Cube) sideToString(side Side) string {
+  s := ""
+
+  for _, face := range cube.facesOn(side) {
+    s += string(face)
+  }
+
+  return s
+}
+
+/*func(oldCube Cube) twist(side Side, direction Rotation) Cube {
+  
+}*/

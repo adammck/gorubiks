@@ -156,3 +156,9 @@ func TestCubeFacesOn(t *testing.T) {
   if left_faces[1] != orange { t.Error("T1 != O") }
   if left_faces[2] != orange { t.Error("L2 != O") }
 }
+
+func TestCubeSideToString(t *testing.T) {
+  if test_cube.sideToString(top)   != "RRRRRRRRR" { t.Error("TOP   should be RRRRRRRRR") }
+  if test_cube.sideToString(front) != "BBBBBBBBB" { t.Error("FRONT should be BBBBBBBBB") }
+  if test_cube.sideToString(left)  != "OOOOOOOOO" { t.Error("LEFT  should be OOOOOOOOO") }
+}
