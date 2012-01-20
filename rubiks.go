@@ -1,9 +1,5 @@
 package rubiks
 
-import (
-  "fmt"
-)
-
 type Face      string 
 type Side      string
 type Direction string
@@ -80,10 +76,4 @@ func(oldPiece Piece) rotate(pivot Side, rotation Rotation) Piece {
   }
 
   return newPiece
-}
-
-func main() {
-  piece1 := Piece {  top: red,  front: green,  left: blue  }
-  piece2 := piece1.rotate(top, clockwise)
-  fmt.Println(piece1, "->", piece2)
 }
