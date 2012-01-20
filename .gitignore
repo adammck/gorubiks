@@ -1,2 +1,10 @@
-*.6
-*.out
+*.o
+*.a
+*.[568vq]
+[568vq].out
+rubiks
+_obj
+_test
+_testmain.go
+test.out
+build.out
