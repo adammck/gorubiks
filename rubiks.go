@@ -104,6 +104,27 @@ func(piece Piece) toString() string {
 
 // -- Cube methods -----------------------------------------------------------
 
+func (cube Cube) toString() string {
+  s := ""
+
+  for i, side := range sides {
+    if i > 0 { s += " " }
+    s += cube.sideToString(side)
+  }
+
+  return s
+}
+
+func (cube Cube) sideToString(side Side) string {
+  s := ""
+
+  for _, face := range cube.facesOn(side) {
+    s += string(face)
+  }
+
+  return s
+}
+
 func (cube Cube) isSolved() bool {
   for _, side := range sides {
     faces := cube.facesOn(side)
@@ -153,16 +174,6 @@ func (cube Cube) facesOn(side Side) [9]Face {
   }
 
   return faces
-}
-
-func (cube Cube) sideToString(side Side) string {
-  s := ""
-
-  for _, face := range cube.facesOn(side) {
-    s += string(face)
-  }
-
-  return s
 }
 
 func (oldCube Cube) twist(side Side, direction Rotation) Cube {
