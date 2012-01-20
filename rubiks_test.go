@@ -135,6 +135,12 @@ func TestCubeSideToString(t *testing.T) {
   if test_cube.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
 }
 
+func TestCubeEquality(t *testing.T) {
+  if test_cube.isEqual(test_cube) != true {
+    t.Error("Cube.isEqual was wrong.")
+  }
+}
+
 func TestCubePiecesOn(t *testing.T) {
   top_pieces := test_cube.piecesOn(top)
   if top_pieces[0].toString() != "R__YO_" { t.Error("TP[0] should be R__YO_") }

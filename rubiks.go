@@ -125,6 +125,20 @@ func (cube Cube) sideToString(side Side) string {
   return s
 }
 
+func (cube Cube) isEqual(other Cube) bool {
+  for _, side := range sides {
+    faces := cube.facesOn(side)
+
+    for i, face := range other.facesOn(side) {
+      if faces[i] != face {
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
 func (cube Cube) isSolved() bool {
   for _, side := range sides {
     faces := cube.facesOn(side)
