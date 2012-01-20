@@ -158,7 +158,27 @@ func TestCubeFacesOn(t *testing.T) {
 }
 
 func TestCubeSideToString(t *testing.T) {
-  if test_cube.sideToString(top)   != "RRRRRRRRR" { t.Error("TOP   should be RRRRRRRRR") }
-  if test_cube.sideToString(front) != "BBBBBBBBB" { t.Error("FRONT should be BBBBBBBBB") }
-  if test_cube.sideToString(left)  != "OOOOOOOOO" { t.Error("LEFT  should be OOOOOOOOO") }
+  if test_cube.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
+  if test_cube.sideToString(front) != "BBBBBBBBB" { t.Error("F != BBBBBBBBB") }
+  if test_cube.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
+}
+
+
+// -- Cube twisting tests -----------------------------------------------------
+
+func TestCubeTwistTopClockwise(t *testing.T) {
+  cube90 := test_cube.twist(top, clockwise)
+  if cube90.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
+  if cube90.sideToString(front) != "WWWBBBBBB" { t.Error("F != WWWRRRRRR") }
+  if cube90.sideToString(left)  != "BBBOOOOOO" { t.Error("L != BBBOOOOOO") }
+
+  cube180 := cube90.twist(top, clockwise)
+  if cube180.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
+  if cube180.sideToString(front) != "YYYBBBBBB" { t.Error("F != YYYRRRRRR") }
+  if cube180.sideToString(left)  != "WWWOOOOOO" { t.Error("L != WWWOOOOOO") }
+
+  cube270 := cube180.twist(top, clockwise)
+  if cube270.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
+  if cube270.sideToString(front) != "OOOBBBBBB" { t.Error("F != OOORRRRRR") }
+  if cube270.sideToString(left)  != "YYYOOOOOO" { t.Error("L != YYYOOOOOO") }
 }

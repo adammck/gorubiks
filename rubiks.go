@@ -136,6 +136,20 @@ func (cube Cube) sideToString(side Side) string {
   return s
 }
 
-/*func(oldCube Cube) twist(side Side, direction Rotation) Cube {
-  
-}*/
+func(oldCube Cube) twist(side Side, direction Rotation) Cube {
+  var newCube Cube
+
+  for i, piece := range oldCube {
+    _, ok := piece[side]
+
+    // if +piece+ is on +side+.
+    if ok {
+      newCube[i] = piece.rotate(side, direction)
+
+    } else {
+      newCube[i] = piece
+    }
+  }
+
+  return newCube
+}
