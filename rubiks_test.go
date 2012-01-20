@@ -13,6 +13,36 @@ var (
     left:   orange,
     right:  white,
   }
+
+  test_cube = Cube {
+    Piece {  top: red,       back: yellow,  left: orange  },
+    Piece {  top: red,       back: yellow                 },
+    Piece {  top: red,       back: yellow,  right: white  },
+    Piece {  top: red,                      left: orange  },
+    Piece {  top: red                                     },
+    Piece {  top: red,                      right: white  },
+    Piece {  top: red,       front: blue,   left: orange  },
+    Piece {  top: red,       front: blue                  },
+    Piece {  top: red,       front: blue,   right: white  },
+    Piece {                  back: yellow,  left: orange  },
+    Piece {                  back: yellow                 },
+    Piece {                  back: yellow,  right: white  },
+    Piece {                                 left: orange  },
+    Piece {                                               },
+    Piece {                                 right: white  },
+    Piece {                  front: blue,   left: orange  },
+    Piece {                  front: blue                  },
+    Piece {                  front: blue,   right: white  },
+    Piece {  bottom: green,  back: yellow,  left: orange  },
+    Piece {  bottom: green,  back: yellow                 },
+    Piece {  bottom: green,  back: yellow,  right: white  },
+    Piece {  bottom: green,                 left: orange  },
+    Piece {  bottom: green                                },
+    Piece {  bottom: green,                 right: white  },
+    Piece {  bottom: green,  front: blue,   left: orange  },
+    Piece {  bottom: green,  front: blue                  },
+    Piece {  bottom: green,  front: blue,   right: white  },
+  }
 )
 
 
@@ -88,4 +118,24 @@ func TestPieceRotateLeftAnticlockwise(t *testing.T) {
   if piece[back]   != red    { t.Error("BACK should be RED.")      }
   if piece[left]   != orange { t.Error("LEFT should be ORANGE.")   }
   if piece[right]  != white  { t.Error("RIGHT should be WHITE.")   }
+}
+
+
+// -- Cube tests --------------------------------------------------------------
+
+func TestCubePiecesOnSide(t *testing.T) {
+  top_pieces := test_cube.piecesOn(top)
+  if top_pieces[0].toString() != "R__YO_" { t.Error("TP[0] should be R__YO_") }
+  if top_pieces[1].toString() != "R__Y__" { t.Error("TP[1] should be R__Y__") }
+  if top_pieces[2].toString() != "R__Y_W" { t.Error("TP[2] should be R__Y_W") }
+
+  front_pieces := test_cube.piecesOn(front)
+  if front_pieces[3].toString() != "__B_O_" { t.Error("FP[0] should be __B_O_") }
+  if front_pieces[4].toString() != "__B___" { t.Error("FP[1] should be __B___") }
+  if front_pieces[5].toString() != "__B__W" { t.Error("FP[2] should be __B__W") }
+
+  left_pieces := test_cube.piecesOn(left)
+  if left_pieces[6].toString() != "_G_YO_" { t.Error("LP[0] should be _G_YO_") }
+  if left_pieces[7].toString() != "_G__O_" { t.Error("LP[1] should be _G__O_") }
+  if left_pieces[8].toString() != "_GB_O_" { t.Error("LP[2] should be _GB_O_") }
 }

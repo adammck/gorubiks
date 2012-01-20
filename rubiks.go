@@ -8,6 +8,8 @@ type Rotation  string
 type Edge      map[Direction] Side
 type Transform map[Direction] Direction
 type Piece     map[Side] Face
+type Cube      [27]Piece
+
 
 var (
 
@@ -95,4 +97,21 @@ func(piece Piece) toString() string {
   }
 
   return s
+}
+
+
+func(cube Cube) piecesOn(side Side) [9]Piece {
+  var pieces [9]Piece
+  n := 0
+
+  for _, piece := range cube {
+    _, ok := piece[side]
+
+    if ok {
+      pieces[n] = piece
+      n += 1
+    }
+  }
+
+  return pieces
 }
