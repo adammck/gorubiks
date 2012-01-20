@@ -233,3 +233,14 @@ func TestCubeTwistLeftClockwise(t *testing.T) {
   if cube270.sideToString(front) != "GBBGBBGBB" { t.Error("F != GBBGBBGBB") }
   if cube270.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
 }
+
+
+// -- Solver tests ------------------------------------------------------------
+
+func TestFindRouteByForce(t *testing.T) {
+  scrambledCube := test_cube.twist(top, clockwise)
+
+  if findRouteByForce(scrambledCube, test_cube) != true {
+    t.Error("Couldn't find route.")
+  }
+}

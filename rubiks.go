@@ -1,5 +1,9 @@
 package rubiks
 
+import (
+  "fmt"
+)
+
 
 type Face      string 
 type Side      string
@@ -35,6 +39,7 @@ var (
 
   clockwise     Rotation = "CW"
   anticlockwise Rotation = "ACW"
+  rotations = [...]Rotation { clockwise, anticlockwise }
   
   opposites = map [Side] Side {
     top:    bottom,
@@ -206,4 +211,29 @@ func (oldCube Cube) twist(side Side, direction Rotation) Cube {
   }
 
   return newCube
+}
+
+
+// -- Solver functions --------------------------------------------------------
+
+func findRouteByForce(src Cube, dest Cube) bool {
+  fmt.Println("src:", src.toString())
+  fmt.Println("dst:", dest.toString())
+
+  if src.isEqual(dest) {
+    return true
+  }
+
+  for _, side := range sides {
+    for _, direction := range rotations {
+      thisCube := src.twist(side, direction)
+
+      if thisCube.isEqual(dest) {
+        fmt.Println("Solved:", side, direction)
+        return true
+      }
+    }
+  }
+
+  return false
 }
