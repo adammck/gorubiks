@@ -12,6 +12,7 @@ type Direction string
 type Rotation  string
 type Edge      map[Direction] Side
 type Transform map[Direction] Direction
+type Piece     map[Side] Face
 
 var (
 
@@ -29,6 +30,7 @@ var (
   Back   Side = "Back"
   Left   Side = "Left"
   Right  Side = "Right"
+  Sides = [...]Side { Top, Bottom, Front, Back, Left, Right }
 
   North Direction = "N"
   East  Direction = "E"
@@ -37,6 +39,15 @@ var (
 
   Clockwise     Rotation = "CW"
   Anticlockwise Rotation = "ACW"
+  
+  Opposites = map [Side] Side {
+    Top:    Bottom,
+    Bottom: Top,
+    Front:  Back,
+    Back:   Front,
+    Left:   Right,
+    Right:  Left,
+  }
 
   Edges = map [Side] Edge {
     Top:    Edge {  North: Back,   South: Front,   East: Right,  West: Left   },
@@ -53,24 +64,28 @@ var (
   }
 )
 
+func(old_piece Piece) rotate(pivot Side, rotation Rotation) Piece {
+  new_piece := Piece { }
 
-type Piece struct {
-  faces [NUM_SIDES]Face
-}
+  // Copy the face which we are pivoting around, and its opposite.
+  opp := Opposites[pivot]
+  s, ok := old_piece[pivot]; if ok { new_piece[pivot] = s }
+  s, ok  = old_piece[opp];   if ok { new_piece[opp]  = s }
 
+  // Copy the other sides (those which are actually changing).
+  for from_dir, to_dir := range Transforms[rotation] {
+    face, ok := old_piece[Edges[pivot][from_dir]]
 
-func(piece *Piece) to_s() string {
-  var s = ""
-
-  for n := 0; n < 6; n++ {
-    s += string(piece.faces[n])
+    if ok {
+      new_piece[Edges[pivot][to_dir]] = face
+    }
   }
 
-  return s
+  return new_piece
 }
 
-
 func main() {
-  piece := Piece{[6]Face{Red, Blank, Green, Blank, Blank, Yellow}}
-  fmt.Println(piece.to_s())
+  piece1 := Piece {  Top: Red,  Front: Green,  Left: Blue  }
+  piece2 := piece1.rotate(Top, Clockwise)
+  fmt.Println(piece1, "->", piece2)
 }
