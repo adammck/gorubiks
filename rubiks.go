@@ -115,3 +115,13 @@ func(cube Cube) piecesOn(side Side) [9]Piece {
 
   return pieces
 }
+
+func(cube Cube) facesOn(side Side) [9]Face {
+  var faces [9]Face
+
+  for i, piece := range cube.piecesOn(side) {
+    faces[i] = piece[side]
+  }
+
+  return faces
+}

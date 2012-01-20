@@ -123,7 +123,7 @@ func TestPieceRotateLeftAnticlockwise(t *testing.T) {
 
 // -- Cube tests --------------------------------------------------------------
 
-func TestCubePiecesOnSide(t *testing.T) {
+func TestCubePiecesOn(t *testing.T) {
   top_pieces := test_cube.piecesOn(top)
   if top_pieces[0].toString() != "R__YO_" { t.Error("TP[0] should be R__YO_") }
   if top_pieces[1].toString() != "R__Y__" { t.Error("TP[1] should be R__Y__") }
@@ -138,4 +138,21 @@ func TestCubePiecesOnSide(t *testing.T) {
   if left_pieces[6].toString() != "_G_YO_" { t.Error("LP[0] should be _G_YO_") }
   if left_pieces[7].toString() != "_G__O_" { t.Error("LP[1] should be _G__O_") }
   if left_pieces[8].toString() != "_GB_O_" { t.Error("LP[2] should be _GB_O_") }
+}
+
+func TestCubeFacesOn(t *testing.T) {
+  top_faces := test_cube.facesOn(top)
+  if top_faces[0] != red { t.Error("T0 != R") }
+  if top_faces[1] != red { t.Error("T1 != R") }
+  if top_faces[2] != red { t.Error("T2 != R") }
+
+  front_faces := test_cube.facesOn(front)
+  if front_faces[0] != blue { t.Error("F0 != B") }
+  if front_faces[1] != blue { t.Error("F1 != B") }
+  if front_faces[2] != blue { t.Error("F2 != B") }
+
+  left_faces := test_cube.facesOn(left)
+  if left_faces[0] != orange { t.Error("T0 != O") }
+  if left_faces[1] != orange { t.Error("T1 != O") }
+  if left_faces[2] != orange { t.Error("L2 != O") }
 }
