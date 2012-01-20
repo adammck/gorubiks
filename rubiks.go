@@ -4,8 +4,6 @@ import (
   "fmt"
 )
 
-const NUM_SIDES = 6
-
 type Face      string 
 type Side      string
 type Direction string
@@ -17,75 +15,75 @@ type Piece     map[Side] Face
 var (
 
   Blank  Face = "_"
-  Red    Face = "R"
-  Green  Face = "G"
-  Blue   Face = "B"
-  Yellow Face = "Y"
-  Orange Face = "O"
-  White  Face = "W"
+  red    Face = "R"
+  green  Face = "G"
+  blue   Face = "B"
+  yellow Face = "Y"
+  orange Face = "O"
+  white  Face = "W"
 
-  Top    Side = "Top"
-  Bottom Side = "Bottom"
-  Front  Side = "Front"
-  Back   Side = "Back"
-  Left   Side = "Left"
-  Right  Side = "Right"
-  Sides = [...]Side { Top, Bottom, Front, Back, Left, Right }
+  top    Side = "top"
+  bottom Side = "bottom"
+  front  Side = "front"
+  back   Side = "back"
+  left   Side = "left"
+  right  Side = "right"
+  sides = [...]Side { top, bottom, front, back, left, right }
 
-  North Direction = "N"
-  East  Direction = "E"
-  South Direction = "S"
-  West  Direction = "W"
+  north Direction = "N"
+  east  Direction = "E"
+  south Direction = "S"
+  west  Direction = "W"
 
-  Clockwise     Rotation = "CW"
-  Anticlockwise Rotation = "ACW"
+  clockwise     Rotation = "CW"
+  anticlockwise Rotation = "ACW"
   
-  Opposites = map [Side] Side {
-    Top:    Bottom,
-    Bottom: Top,
-    Front:  Back,
-    Back:   Front,
-    Left:   Right,
-    Right:  Left,
+  opposites = map [Side] Side {
+    top:    bottom,
+    bottom: top,
+    front:  back,
+    back:   front,
+    left:   right,
+    right:  left,
   }
 
-  Edges = map [Side] Edge {
-    Top:    Edge {  North: Back,   South: Front,   East: Right,  West: Left   },
-    Bottom: Edge {  North: Front,  South: Back,    East: Left,   West: Right  },
-    Front:  Edge {  North: Top,    South: Bottom,  East: Right,  West: Left   },
-    Back:   Edge {  North: Top,    South: Bottom,  East: Left,   West: Right  },
-    Left:   Edge {  North: Top,    South: Bottom,  East: Front,  West: Back   },
-    Right:  Edge {  North: Top,    South: Bottom,  East: Back,   West: Front  },
+  edges = map [Side] Edge {
+    top:    Edge {  north: back,   south: front,   east: right,  west: left   },
+    bottom: Edge {  north: front,  south: back,    east: left,   west: right  },
+    front:  Edge {  north: top,    south: bottom,  east: right,  west: left   },
+    back:   Edge {  north: top,    south: bottom,  east: left,   west: right  },
+    left:   Edge {  north: top,    south: bottom,  east: front,  west: back   },
+    right:  Edge {  north: top,    south: bottom,  east: back,   west: front  },
   }
 
-  Transforms = map [Rotation] Transform {
-    Clockwise:     Transform {  West: North,  North: East,  East: South,  South: West  },
-    Anticlockwise: Transform {  East: North,  South: East,  West: South,  North: West  },
+  transforms = map [Rotation] Transform {
+    clockwise:     Transform {  west: north,  north: east,  east: south,  south: west  },
+    anticlockwise: Transform {  east: north,  south: east,  west: south,  north: west  },
   }
 )
 
-func(old_piece Piece) rotate(pivot Side, rotation Rotation) Piece {
-  new_piece := Piece { }
+func(oldPiece Piece) rotate(pivot Side, rotation Rotation) Piece {
+  newPiece := Piece { }
 
   // Copy the face which we are pivoting around, and its opposite.
-  opp := Opposites[pivot]
-  s, ok := old_piece[pivot]; if ok { new_piece[pivot] = s }
-  s, ok  = old_piece[opp];   if ok { new_piece[opp]  = s }
+  opp := opposites[pivot]
+  s, ok := oldPiece[pivot]; if ok { newPiece[pivot] = s }
+  s, ok  = oldPiece[opp];   if ok { newPiece[opp]   = s }
 
   // Copy the other sides (those which are actually changing).
-  for from_dir, to_dir := range Transforms[rotation] {
-    face, ok := old_piece[Edges[pivot][from_dir]]
+  for src, dest := range transforms[rotation] {
+    face, ok := oldPiece[edges[pivot][src]]
 
     if ok {
-      new_piece[Edges[pivot][to_dir]] = face
+      newPiece[edges[pivot][dest]] = face
     }
   }
 
-  return new_piece
+  return newPiece
 }
 
 func main() {
-  piece1 := Piece {  Top: Red,  Front: Green,  Left: Blue  }
-  piece2 := piece1.rotate(Top, Clockwise)
+  piece1 := Piece {  top: red,  front: green,  left: blue  }
+  piece2 := piece1.rotate(top, clockwise)
   fmt.Println(piece1, "->", piece2)
 }
