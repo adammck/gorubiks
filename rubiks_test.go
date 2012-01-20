@@ -169,7 +169,7 @@ func TestCubeSideToString(t *testing.T) {
 func TestCubeTwistTopClockwise(t *testing.T) {
   cube90 := test_cube.twist(top, clockwise)
   if cube90.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
-  if cube90.sideToString(front) != "WWWBBBBBB" { t.Error("F != WWWRRRRRR") }
+  if cube90.sideToString(front) != "WWWBBBBBB" { t.Error("F != WWWBBBBBB") }
   if cube90.sideToString(left)  != "BBBOOOOOO" { t.Error("L != BBBOOOOOO") }
 
   cube180 := cube90.twist(top, clockwise)
@@ -181,4 +181,38 @@ func TestCubeTwistTopClockwise(t *testing.T) {
   if cube270.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
   if cube270.sideToString(front) != "OOOBBBBBB" { t.Error("F != OOORRRRRR") }
   if cube270.sideToString(left)  != "YYYOOOOOO" { t.Error("L != YYYOOOOOO") }
+}
+
+func TestCubeTwistFrontClockwise(t *testing.T) {
+  cube90 := test_cube.twist(front, clockwise)
+  if cube90.sideToString(top)   != "RRRRRROOO" { t.Error("T != RRRRRROOO") }
+  if cube90.sideToString(front) != "BBBBBBBBB" { t.Error("F != BBBBBBBBB") }
+  if cube90.sideToString(left)  != "OOGOOGOOG" { t.Error("L != OOGOOGOOG") }
+
+  cube180 := cube90.twist(front, clockwise)
+  if cube180.sideToString(top)   != "RRRRRRGGG" { t.Error("T != RRRRRRGGG") }
+  if cube180.sideToString(front) != "BBBBBBBBB" { t.Error("F != BBBBBBBBB") }
+  if cube180.sideToString(left)  != "OOWOOWOOW" { t.Error("L != OOWOOWOOW") }
+
+  cube270 := cube180.twist(front, clockwise)
+  if cube270.sideToString(top)   != "RRRRRRWWW" { t.Error("T != RRRRRRWWW") }
+  if cube270.sideToString(front) != "BBBBBBBBB" { t.Error("F != BBBBBBBBB") }
+  if cube270.sideToString(left)  != "OOROOROOR" { t.Error("L != OOROOROOR") }
+}
+
+func TestCubeTwistLeftClockwise(t *testing.T) {
+  cube90 := test_cube.twist(left, clockwise)
+  if cube90.sideToString(top)   != "YRRYRRYRR" { t.Errorf("T != YRRYRRYRR (was: %s)", cube90.sideToString(top)) }
+  if cube90.sideToString(front) != "RBBRBBRBB" { t.Error("F != RBBRBBRBB") }
+  if cube90.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
+
+  cube180 := cube90.twist(left, clockwise)
+  if cube180.sideToString(top)   != "GRRGRRGRR" { t.Error("T != GRRGRRGRR") }
+  if cube180.sideToString(front) != "YBBYBBYBB" { t.Error("F != YBBYBBYBB") }
+  if cube180.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
+
+  cube270 := cube180.twist(left, clockwise)
+  if cube270.sideToString(top)   != "BRRBRRBRR" { t.Error("T != BRRBRRBRR") }
+  if cube270.sideToString(front) != "GBBGBBGBB" { t.Error("F != GBBGBBGBB") }
+  if cube270.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
 }
