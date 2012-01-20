@@ -1,5 +1,6 @@
 package rubiks
 
+
 type Face      string 
 type Side      string
 type Direction string
@@ -10,7 +11,6 @@ type Piece     map[Side] Face
 
 var (
 
-  Blank  Face = "_"
   red    Face = "R"
   green  Face = "G"
   blue   Face = "B"
@@ -58,6 +58,7 @@ var (
   }
 )
 
+
 func(oldPiece Piece) rotate(pivot Side, rotation Rotation) Piece {
   newPiece := Piece { }
 
@@ -76,4 +77,22 @@ func(oldPiece Piece) rotate(pivot Side, rotation Rotation) Piece {
   }
 
   return newPiece
+}
+
+func(piece Piece) toString() string {
+  s := ""
+
+  for _, side := range sides {
+    face, ok := piece[side]
+
+    if ok {
+      s += string(face)
+
+    } else {
+      s += "_"
+
+    }
+  }
+
+  return s
 }

@@ -15,7 +15,22 @@ var (
   }
 )
 
-func TestRotateTopClockwise(t *testing.T) {
+
+// -- Piece tests -------------------------------------------------------------
+
+func TestPieceToString(t *testing.T) {
+  corner := Piece { top: red, front: blue, left: orange }
+  edge   := Piece { top: red, front: blue }
+  middle := Piece { top: red }
+  center := Piece { }
+
+  if corner.toString() != "R_B_O_" { t.Error("CORNER should be 'R_B_O_'.") }
+  if edge.toString()   != "R_B___" { t.Error("EDGE should be 'R_B___'.") }
+  if middle.toString() != "R_____" { t.Error("MIDDLE should be 'R_____'.") }
+  if center.toString() != "______" { t.Error("CENTER should be '______'.") }
+}
+
+func TestPieceRotateTopClockwise(t *testing.T) {
   piece := test_piece.rotate(top, clockwise)
   if piece[top]    != red    { t.Error("TOP should be RED.")      }
   if piece[bottom] != green  { t.Error("BOTTOM should be GREEN.") }
@@ -25,7 +40,7 @@ func TestRotateTopClockwise(t *testing.T) {
   if piece[right]  != yellow { t.Error("RIGHT should be YELLOW.") }
 }
 
-func TestRotateTopAnticlockwise(t *testing.T) {
+func TestPieceRotateTopAnticlockwise(t *testing.T) {
   piece := test_piece.rotate(top, anticlockwise)
   if piece[top]    != red    { t.Error("TOP should be RED.")      }
   if piece[bottom] != green  { t.Error("BOTTOM should be GREEN.") }
@@ -35,7 +50,7 @@ func TestRotateTopAnticlockwise(t *testing.T) {
   if piece[right]  != blue   { t.Error("RIGHT should be BLUE.")   }
 }
 
-func TestRotateFrontClockwise(t *testing.T) {
+func TestPieceRotateFrontClockwise(t *testing.T) {
   piece := test_piece.rotate(front, clockwise)
   if piece[top]    != orange { t.Error("TOP should be ORANGE.")   }
   if piece[bottom] != white  { t.Error("BOTTOM should be WHITE.") }
@@ -45,7 +60,7 @@ func TestRotateFrontClockwise(t *testing.T) {
   if piece[right]  != red    { t.Error("RIGHT should be RED.")    }
 }
 
-func TestRotateFrontAnticlockwise(t *testing.T) {
+func TestPieceRotateFrontAnticlockwise(t *testing.T) {
   piece := test_piece.rotate(front, anticlockwise)
   if piece[top]    != white  { t.Error("TOP should be WHITE.")     }
   if piece[bottom] != orange { t.Error("BOTTOM should be ORANGE.") }
@@ -55,7 +70,7 @@ func TestRotateFrontAnticlockwise(t *testing.T) {
   if piece[right]  != green  { t.Error("RIGHT should be GREEN.")   }
 }
 
-func TestRotateLeftClockwise(t *testing.T) {
+func TestPieceRotateLeftClockwise(t *testing.T) {
   piece := test_piece.rotate(left, clockwise)
   if piece[top]    != yellow { t.Error("TOP should be YELLOW.")   }
   if piece[bottom] != blue   { t.Error("BOTTOM should be BLUE.")  }
@@ -65,7 +80,7 @@ func TestRotateLeftClockwise(t *testing.T) {
   if piece[right]  != white  { t.Error("RIGHT should be WHITE.")  }
 }
 
-func TestRotateLeftAnticlockwise(t *testing.T) {
+func TestPieceRotateLeftAnticlockwise(t *testing.T) {
   piece := test_piece.rotate(left, anticlockwise)
   if piece[top]    != blue   { t.Error("TOP should be BLUE.")      }
   if piece[bottom] != yellow { t.Error("BOTTOM should be YELLOW.") }
