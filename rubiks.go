@@ -61,6 +61,8 @@ var (
 )
 
 
+// -- Piece methods -----------------------------------------------------------
+
 func(oldPiece Piece) rotate(pivot Side, rotation Rotation) Piece {
   newPiece := Piece { }
 
@@ -99,6 +101,24 @@ func(piece Piece) toString() string {
   return s
 }
 
+
+// -- Cube methods -----------------------------------------------------------
+
+func (cube Cube) isSolved() bool {
+  for _, side := range sides {
+    faces := cube.facesOn(side)
+    centerFaceColor := faces[4]
+
+    for _, face := range faces {
+      if face != centerFaceColor {
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
 func pieceIndex(piece Piece, side Side) int {
   i := 4
 
@@ -110,7 +130,7 @@ func pieceIndex(piece Piece, side Side) int {
   return i
 }
 
-func(cube Cube) piecesOn(side Side) [9]Piece {
+func (cube Cube) piecesOn(side Side) [9]Piece {
   var pieces [9]Piece
 
   for _, piece := range cube {
@@ -125,7 +145,7 @@ func(cube Cube) piecesOn(side Side) [9]Piece {
   return pieces
 }
 
-func(cube Cube) facesOn(side Side) [9]Face {
+func (cube Cube) facesOn(side Side) [9]Face {
   var faces [9]Face
 
   for i, piece := range cube.piecesOn(side) {
@@ -145,7 +165,7 @@ func (cube Cube) sideToString(side Side) string {
   return s
 }
 
-func(oldCube Cube) twist(side Side, direction Rotation) Cube {
+func (oldCube Cube) twist(side Side, direction Rotation) Cube {
   var newCube Cube
 
   for i, piece := range oldCube {

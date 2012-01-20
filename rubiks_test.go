@@ -166,6 +166,11 @@ func TestCubeSideToString(t *testing.T) {
 
 // -- Cube twisting tests -----------------------------------------------------
 
+func TestCubeIsSolved(t *testing.T) {
+  if test_cube.isSolved()                       != true  { t.Error("Cube should be solved.") }
+  if test_cube.twist(top, clockwise).isSolved() != false { t.Error("Cube should not be solved.") }
+}
+
 func TestCubeTwistTopClockwise(t *testing.T) {
   cube90 := test_cube.twist(top, clockwise)
   if cube90.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
