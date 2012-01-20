@@ -99,17 +99,26 @@ func(piece Piece) toString() string {
   return s
 }
 
+func pieceIndex(piece Piece, side Side) int {
+  i := 4
+
+  if _, ok := piece[edges[side][north]]; ok { i -= 3 }
+  if _, ok := piece[edges[side][east]];  ok { i += 1 }
+  if _, ok := piece[edges[side][south]]; ok { i += 3 }
+  if _, ok := piece[edges[side][west]];  ok { i -= 1 }
+
+  return i
+}
 
 func(cube Cube) piecesOn(side Side) [9]Piece {
   var pieces [9]Piece
-  n := 0
 
   for _, piece := range cube {
     _, ok := piece[side]
 
     if ok {
-      pieces[n] = piece
-      n += 1
+      i := pieceIndex(piece, side)
+      pieces[i] = piece
     }
   }
 
