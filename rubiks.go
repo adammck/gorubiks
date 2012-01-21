@@ -5,6 +5,9 @@ import (
 )
 
 
+const MAX_DEPTH = 10
+
+
 type Face      string 
 type Side      string
 type Direction string
@@ -13,6 +16,13 @@ type Edge      map[Direction] Side
 type Transform map[Direction] Direction
 type Piece     map[Side] Face
 type Cube      [27]Piece
+
+type Move struct {
+  side     Side
+  rotation Rotation
+}
+
+type MoveList []Move
 
 
 var (
@@ -217,23 +227,47 @@ func (oldCube Cube) twist(side Side, direction Rotation) Cube {
 // -- Solver functions --------------------------------------------------------
 
 func findRouteByForce(src Cube, dest Cube) bool {
-  fmt.Println("src:", src.toString())
-  fmt.Println("dst:", dest.toString())
+  fmt.Println("src =", src.toString())
+  fmt.Println("dst =", dest.toString())
 
+  return doFindRouteByForce(src, dest, make(MoveList, 0)) != nil
+}
+
+func doFindRouteByForce(src Cube, dest Cube, stack MoveList) MoveList {
+
+  // If the cube is solved (i.e. src=dest), there's nothing for us to do.
   if src.isEqual(dest) {
-    return true
+    fmt.Println("Solved:", stack)
+    return stack
   }
 
+  // If the stack is too deep, abort.
+  if len(stack) > MAX_DEPTH {
+    return nil
+  }
+
+  // Iterate through all of the possible moves.
   for _, side := range sides {
     for _, direction := range rotations {
+
+      // Build a new cube for this move.
+      thisStack := append(stack, Move { side, direction })
       thisCube := src.twist(side, direction)
 
-      if thisCube.isEqual(dest) {
-        fmt.Println("Solved:", side, direction)
-        return true
+      /* Recurse, to:
+      |*  (a) check if we found a solution,
+      |*  (b) continue searching, if not. */
+      thisMoveList := doFindRouteByForce(thisCube, dest, thisStack)
+
+      /* We found a solution (somewhere down the stack)! Allow the return value
+      |* (a list of moves) to propagate, to eventually return the solution to
+      |* the original caller. */
+      if thisMoveList != nil {
+        return thisMoveList
       }
     }
   }
 
-  return false
+  // Didn't find a solution, so return nothing.
+  return nil
 }
