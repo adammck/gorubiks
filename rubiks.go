@@ -63,15 +63,6 @@ var (
   sides     = [...] Side     { top, bottom, front, back, left, right }
   rotations = [...] Rotation { once, twice, thrice }
 
-  opposites = map [Side] Side {
-    top:    bottom,
-    bottom: top,
-    front:  back,
-    back:   front,
-    left:   right,
-    right:  left,
-  }
-
   edges = [...] Edge {
     /*      North   East    South    West
     |*      -----   ----    -----    ---- */
