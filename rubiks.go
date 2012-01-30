@@ -75,12 +75,12 @@ var (
   edges = [...] Edge {
     /*      North   East    South    West
     |*      -----   ----    -----    ---- */
-    Edge {  back,   right,  front,   left   }, // Top
-    Edge {  front,  left,   back,    right  }, // Bottom
-    Edge {  top,    right,  bottom,  left   }, // Front
-    Edge {  top,    left,   bottom,  right  }, // Back
-    Edge {  top,    front,  bottom,  back   }, // Left
-    Edge {  top,    back,   bottom,  front  }, // Right
+    top:    Edge {  back,   right,  front,   left   },
+    bottom: Edge {  front,  left,   back,    right  },
+    front:  Edge {  top,    right,  bottom,  left   },
+    back:   Edge {  top,    left,   bottom,  right  },
+    left:   Edge {  top,    front,  bottom,  back   },
+    right:  Edge {  top,    back,   bottom,  front  },
   }
 
   transforms = [...] Transform {
