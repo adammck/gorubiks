@@ -54,13 +54,14 @@ const (
 
 // Rotations
 const (
-  clockwise     Rotation = iota
-  anticlockwise Rotation = iota
+  once   Rotation = iota
+  twice  Rotation = iota
+  thrice Rotation = iota
 )
 
 var (
   sides     = [...] Side     { top, bottom, front, back, left, right }
-  rotations = [...] Rotation { clockwise, anticlockwise }
+  rotations = [...] Rotation { once, twice, thrice }
 
   opposites = map [Side] Side {
     top:    bottom,
@@ -83,10 +84,11 @@ var (
   }
 
   transforms = [...] Transform {
-    /*           North   East    South    West
-    |*           -----   ----    -----    ---- */
-    Transform {  east,   south,  west,    north  }, // Clockwise
-    Transform {  west,   north,  east,    south  }, // Anticlockwise
+    /*                   North   East    South   West
+    |*                   -----   ----    -----   ---- */
+    once:   Transform {  east,   south,  west,   north  },
+    twice:  Transform {  south,  west,   north,  east   },
+    thrice: Transform {  west,   north,  east,   south  },
   }
 )
 
@@ -210,7 +212,11 @@ func (cube *Cube) twist(side Side, direction Rotation) {
 }
 
 func (cube *Cube) untwist(side Side, direction Rotation) {
-  cube.twist(side, rotations[1 - direction])
+  switch(direction) {
+    case once:   cube.twist(side, thrice)
+    case twice:  cube.twist(side, twice)
+    case thrice: cube.twist(side, once)
+  }
 }
 
 
