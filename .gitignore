@@ -1,6 +1,8 @@
 *.o
 *.a
 *.[568vq]
+*.pprof
+*.mprof
 [568vq].out
 rubiks
 _obj
