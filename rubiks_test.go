@@ -20,33 +20,35 @@ func testPiece() Piece {
 
 func testCube() Cube {
   return Cube {
-    Piece {  top: red,       back: yellow,  left: orange  },
-    Piece {  top: red,       back: yellow                 },
-    Piece {  top: red,       back: yellow,  right: white  },
-    Piece {  top: red,                      left: orange  },
-    Piece {  top: red                                     },
-    Piece {  top: red,                      right: white  },
-    Piece {  top: red,       front: blue,   left: orange  },
-    Piece {  top: red,       front: blue                  },
-    Piece {  top: red,       front: blue,   right: white  },
-    Piece {                  back: yellow,  left: orange  },
-    Piece {                  back: yellow                 },
-    Piece {                  back: yellow,  right: white  },
-    Piece {                                 left: orange  },
-    Piece {                                               },
-    Piece {                                 right: white  },
-    Piece {                  front: blue,   left: orange  },
-    Piece {                  front: blue                  },
-    Piece {                  front: blue,   right: white  },
-    Piece {  bottom: green,  back: yellow,  left: orange  },
-    Piece {  bottom: green,  back: yellow                 },
-    Piece {  bottom: green,  back: yellow,  right: white  },
-    Piece {  bottom: green,                 left: orange  },
-    Piece {  bottom: green                                },
-    Piece {  bottom: green,                 right: white  },
-    Piece {  bottom: green,  front: blue,   left: orange  },
-    Piece {  bottom: green,  front: blue                  },
-    Piece {  bottom: green,  front: blue,   right: white  },
+    //       TOP,   BOTTM, FRONT, BACK,   LEFT, RIGHT
+    //       ---    -----  -----  ----    ----  -----
+    Piece {  red,   blank, blank, yellow, orange, blank },
+    Piece {  red,   blank, blank, yellow, blank,  blank },
+    Piece {  red,   blank, blank, yellow, blank,  white },
+    Piece {  red,   blank, blank, blank,  orange, blank },
+    Piece {  red,   blank, blank, blank,  blank,  blank },
+    Piece {  red,   blank, blank, blank,  blank,  white },
+    Piece {  red,   blank, blue,  blank,  orange, blank },
+    Piece {  red,   blank, blue,  blank,  blank,  blank },
+    Piece {  red,   blank, blue,  blank,  blank,  white },
+    Piece {  blank, blank, blank, yellow, orange, blank },
+    Piece {  blank, blank, blank, yellow, blank,  blank },
+    Piece {  blank, blank, blank, yellow, blank,  white },
+    Piece {  blank, blank, blank, blank,  orange, blank },
+    Piece {  blank, blank, blank, blank,  blank,  blank },
+    Piece {  blank, blank, blank, blank,  blank,  white },
+    Piece {  blank, blank, blue,  blank,  orange, blank },
+    Piece {  blank, blank, blue,  blank,  blank,  blank },
+    Piece {  blank, blank, blue,  blank,  blank,  white },
+    Piece {  blank, green, blank, yellow, orange, blank },
+    Piece {  blank, green, blank, yellow, blank,  blank },
+    Piece {  blank, green, blank, yellow, blank,  white },
+    Piece {  blank, green, blank, blank,  orange, blank },
+    Piece {  blank, green, blank, blank,  blank,  blank },
+    Piece {  blank, green, blank, blank,  blank,  white },
+    Piece {  blank, green, blue,  blank,  orange, blank },
+    Piece {  blank, green, blue,  blank,  blank,  blank },
+    Piece {  blank, green, blue,  blank,  blank,  white },
   }
 }
 
@@ -139,52 +141,44 @@ func TestPieceRotateLeftAnticlockwise(t *testing.T) {
 // -- Cube tests --------------------------------------------------------------
 
 func TestCubeToString(t *testing.T) {
-  if testCube().toString() != "RRRRRRRRR GGGGGGGGG BBBBBBBBB YYYYYYYYY OOOOOOOOO WWWWWWWWW" {
+  test_cube := testCube()
+
+  if test_cube.toString() != "RRRRRRRRR GGGGGGGGG BBBBBBBBB YYYYYYYYY OOOOOOOOO WWWWWWWWW" {
     t.Error("Cube.toString was wrong.")
   }
 }
 
 func TestCubeSideToString(t *testing.T) {
-  if testCube().sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
-  if testCube().sideToString(front) != "BBBBBBBBB" { t.Error("F != BBBBBBBBB") }
-  if testCube().sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
+  test_cube := testCube()
+
+  if test_cube.sideToString(top)   != "RRRRRRRRR" { t.Error("T != RRRRRRRRR") }
+  if test_cube.sideToString(front) != "BBBBBBBBB" { t.Error("F != BBBBBBBBB") }
+  if test_cube.sideToString(left)  != "OOOOOOOOO" { t.Error("L != OOOOOOOOO") }
 }
 
 func TestCubeEquality(t *testing.T) {
-  if testCube().isEqual(testCube()) != true {
+  test_cube_one := testCube()
+  test_cube_two := testCube()
+
+  if test_cube_one.isEqual(&test_cube_two) != true {
     t.Error("Cube.isEqual was wrong.")
   }
 }
 
-func TestCubePiecesOn(t *testing.T) {
-  top_pieces := testCube().piecesOn(top)
-  if top_pieces[0].toString() != "R__YO_" { t.Error("TP[0] should be R__YO_") }
-  if top_pieces[1].toString() != "R__Y__" { t.Error("TP[1] should be R__Y__") }
-  if top_pieces[2].toString() != "R__Y_W" { t.Error("TP[2] should be R__Y_W") }
-
-  front_pieces := testCube().piecesOn(front)
-  if front_pieces[3].toString() != "__B_O_" { t.Error("FP[0] should be __B_O_") }
-  if front_pieces[4].toString() != "__B___" { t.Error("FP[1] should be __B___") }
-  if front_pieces[5].toString() != "__B__W" { t.Error("FP[2] should be __B__W") }
-
-  left_pieces := testCube().piecesOn(left)
-  if left_pieces[6].toString() != "_G_YO_" { t.Error("LP[0] should be _G_YO_") }
-  if left_pieces[7].toString() != "_G__O_" { t.Error("LP[1] should be _G__O_") }
-  if left_pieces[8].toString() != "_GB_O_" { t.Error("LP[2] should be _GB_O_") }
-}
-
 func TestCubeFacesOn(t *testing.T) {
-  top_faces := testCube().facesOn(top)
+  test_cube := testCube()
+
+  top_faces := test_cube.facesOn(top)
   if top_faces[0] != red { t.Error("T0 != R") }
   if top_faces[1] != red { t.Error("T1 != R") }
   if top_faces[2] != red { t.Error("T2 != R") }
 
-  front_faces := testCube().facesOn(front)
+  front_faces := test_cube.facesOn(front)
   if front_faces[0] != blue { t.Error("F0 != B") }
   if front_faces[1] != blue { t.Error("F1 != B") }
   if front_faces[2] != blue { t.Error("F2 != B") }
 
-  left_faces := testCube().facesOn(left)
+  left_faces := test_cube.facesOn(left)
   if left_faces[0] != orange { t.Error("T0 != O") }
   if left_faces[1] != orange { t.Error("T1 != O") }
   if left_faces[2] != orange { t.Error("L2 != O") }
@@ -269,6 +263,7 @@ func TestCubeTwistLeftClockwise(t *testing.T) {
 
 func TestFindRouteByForce(t *testing.T) {
   scrambledCube := testCube()
+
   scrambledCube.twist(top, clockwise)
   scrambledCube.twist(left, anticlockwise)
   scrambledCube.twist(bottom, clockwise)
