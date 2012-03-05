@@ -1,12 +1,14 @@
-package rubiks
+package main
 
 import (
   "fmt"
+  "os"
+  "runtime/pprof"
   "container/vector"
 )
 
 
-const MAX_DEPTH = 5
+const MAX_DEPTH = 6
 
 
 type Face      int
@@ -154,6 +156,18 @@ func (cube *Cube) isEqual(other *Cube) bool {
   return true
 }
 
+func (cube *Cube) cornersAreSolved() bool {
+  for n := range sides {
+    faces := cube.facesOn(sides[n])
+
+    if (faces[0] != faces[2]) || (faces[0] != faces[6]) || (faces[0] != faces[8]) {
+      return false
+    }
+  }
+
+  return true
+}
+
 func (cube *Cube) isSolved() bool {
   for _, side := range sides {
     faces := cube.facesOn(side)
@@ -224,10 +238,15 @@ func findRouteByForce(src Cube, dest Cube) bool {
 
 func doFindRouteByForce (src *Cube, dest *Cube, stack *vector.Vector) bool {
 
-  if src.isEqual(dest) {
-    fmt.Println("Solved:", stack)
+  if src.cornersAreSolved() {
+    fmt.Println("Corners:", src.toString(), stack)
     return true
   }
+
+  /*if src.isEqual(dest) {
+    fmt.Println("Solved:", stack)
+    return true
+  }*/
 
   if stack.Len() >= MAX_DEPTH {
     return false
@@ -249,4 +268,100 @@ func doFindRouteByForce (src *Cube, dest *Cube, stack *vector.Vector) bool {
   }
 
   return false
+}
+
+
+
+
+
+// -- main --------------------------------------------------------------------
+
+func MyCube () Cube {
+  return Cube {
+    Piece {  top: orange,     back: blue,     left: yellow   },
+    Piece {  top: red,        back: green                    },
+    Piece {  top: white,      back: green,    right: blue    },
+    Piece {  top: orange,                     left: white    },
+    Piece {  top: orange                                     },
+    Piece {  top: orange,                     right: green   },
+    Piece {  top: red,        front: yellow,  left: green    },
+    Piece {  top: yellow,     front: blue                    },
+    Piece {  top: orange,     front: white,   right: green   },
+    Piece {                   back: blue,     left: orange   },
+    Piece {                   back: yellow                   },
+    Piece {                   back: green,    right: blue    },
+    Piece {                                   left: green    },
+    Piece {                                                  },
+    Piece {                                   right: yellow  },
+    Piece {                   front: white,   left: green    },
+    Piece {                   front: white                   },
+    Piece {                   front: white,   right: green   },
+    Piece {  bottom: yellow,  back: red,      left: blue     },
+    Piece {  bottom: yellow,  back: orange                   },
+    Piece {  bottom: orange,  back: yellow,   right: red     },
+    Piece {  bottom: yellow,                  left: red      },
+    Piece {  bottom: red                                     },
+    Piece {  bottom: red,                     right: orange  },
+    Piece {  bottom: red,     front: white,   left: green    },
+    Piece {  bottom: red,     front: white                   },
+    Piece {  bottom: red,     front: white,   right: yellow  },
+  }
+}
+
+func SolvedCube () Cube {
+  return Cube {
+    //       TOP,   BOTTM, FRONT, BACK,   LEFT, RIGHT
+    //       ---    -----  -----  ----    ----  -----
+    Piece {  red,   blank, blank, yellow, orange, blank },
+    Piece {  red,   blank, blank, yellow, blank,  blank },
+    Piece {  red,   blank, blank, yellow, blank,  white },
+    Piece {  red,   blank, blank, blank,  orange, blank },
+    Piece {  red,   blank, blank, blank,  blank,  blank },
+    Piece {  red,   blank, blank, blank,  blank,  white },
+    Piece {  red,   blank, blue,  blank,  orange, blank },
+    Piece {  red,   blank, blue,  blank,  blank,  blank },
+    Piece {  red,   blank, blue,  blank,  blank,  white },
+    Piece {  blank, blank, blank, yellow, orange, blank },
+    Piece {  blank, blank, blank, yellow, blank,  blank },
+    Piece {  blank, blank, blank, yellow, blank,  white },
+    Piece {  blank, blank, blank, blank,  orange, blank },
+    Piece {  blank, blank, blank, blank,  blank,  blank },
+    Piece {  blank, blank, blank, blank,  blank,  white },
+    Piece {  blank, blank, blue,  blank,  orange, blank },
+    Piece {  blank, blank, blue,  blank,  blank,  blank },
+    Piece {  blank, blank, blue,  blank,  blank,  white },
+    Piece {  blank, green, blank, yellow, orange, blank },
+    Piece {  blank, green, blank, yellow, blank,  blank },
+    Piece {  blank, green, blank, yellow, blank,  white },
+    Piece {  blank, green, blank, blank,  orange, blank },
+    Piece {  blank, green, blank, blank,  blank,  blank },
+    Piece {  blank, green, blank, blank,  blank,  white },
+    Piece {  blank, green, blue,  blank,  orange, blank },
+    Piece {  blank, green, blue,  blank,  blank,  blank },
+    Piece {  blank, green, blue,  blank,  blank,  white },
+  }
+}
+
+func main() {
+  scrambledCube := MyCube()
+
+  /*scrambledCube.twist(top, clockwise)
+  scrambledCube.twist(left, anticlockwise)
+  scrambledCube.twist(bottom, clockwise)
+  scrambledCube.twist(right, anticlockwise)
+
+  scrambledCube.twist(top, clockwise)
+  scrambledCube.twist(left, anticlockwise)
+  scrambledCube.twist(bottom, clockwise)
+  scrambledCube.twist(right, anticlockwise)*/
+
+  pf, _ := os.Create("rubiks.pprof")
+  mf, _ := os.Create("rubiks.mprof")
+  pprof.StartCPUProfile(pf)
+  defer pprof.StopCPUProfile()
+
+  findRouteByForce(scrambledCube, SolvedCube())
+  
+  pprof.WriteHeapProfile(mf)
+  mf.Close()
 }

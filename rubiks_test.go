@@ -269,6 +269,11 @@ func TestFindRouteByForce(t *testing.T) {
   scrambledCube.twist(bottom, clockwise)
   scrambledCube.twist(right, anticlockwise)
 
+  scrambledCube.twist(top, clockwise)
+  scrambledCube.twist(left, anticlockwise)
+  scrambledCube.twist(bottom, clockwise)
+  scrambledCube.twist(right, anticlockwise)
+
   if findRouteByForce(scrambledCube, testCube()) != true {
     t.Error("Couldn't find route.")
   }
