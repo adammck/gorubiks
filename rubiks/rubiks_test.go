@@ -1,8 +1,6 @@
 package rubiks
 
-import (
-  "testing"
-)
+import "testing"
 
 var (
   test_piece = Piece {
@@ -237,9 +235,9 @@ func TestCubeTwistLeftClockwise(t *testing.T) {
 
 // -- Solver tests ------------------------------------------------------------
 
-func TestFindRouteByForce(t *testing.T) {
+/* func TestFindRouteByForce(t *testing.T) {
   scrambledCube := test_cube.twist(top, clockwise).twist(left, anticlockwise).twist(bottom, clockwise).twist(right, anticlockwise)
   if findRouteByForce(scrambledCube, test_cube) != true {
     t.Error("Couldn't find route.")
   }
-}
+} */

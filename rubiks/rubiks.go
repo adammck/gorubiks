@@ -8,7 +8,7 @@ import (
 const MAX_DEPTH = 10
 
 
-type Face      string 
+type Face      string
 type Side      string
 type Direction string
 type Rotation  string
@@ -50,7 +50,7 @@ var (
   clockwise     Rotation = "CW"
   anticlockwise Rotation = "ACW"
   rotations = [...]Rotation { clockwise, anticlockwise }
-  
+
   opposites = map [Side] Side {
     top:    bottom,
     bottom: top,
