@@ -5,7 +5,15 @@ import (
 )
 
 
-const MAX_DEPTH = 10
+/* The maximum depth which the solver will search to.
+|* Some very rough benchmarks:
+|*
+|*  1 (12)     =   0.00
+|*  2 (144)    =   0.05
+|*  3 (1728)   =   1.11403
+|*  4 (20736)  =  12.27251
+|*  5 (248832) = 151.75544 */
+const MAX_DEPTH = 4
 
 
 type Face      string
@@ -78,33 +86,25 @@ var (
 
 // -- Piece methods -----------------------------------------------------------
 
+
 func(oldPiece Piece) rotate(pivot Side, rotation Rotation) Piece {
-  newPiece := Piece { }
-
-  // Copy the face which we are pivoting around, and its opposite.
-  opp := opposites[pivot]
-  s, ok := oldPiece[pivot]; if ok { newPiece[pivot] = s }
-  s, ok  = oldPiece[opp];   if ok { newPiece[opp]   = s }
-
-  // Copy the other sides (those which are actually changing).
-  for src, dest := range transforms[rotation] {
-    face, ok := oldPiece[edges[pivot][src]]
-
-    if ok {
-      newPiece[edges[pivot][dest]] = face
-    }
+  return Piece {
+    edges[pivot][transforms[rotation][north]]: oldPiece[edges[pivot][north]],
+    edges[pivot][transforms[rotation][south]]: oldPiece[edges[pivot][south]],
+    edges[pivot][transforms[rotation][east]]:  oldPiece[edges[pivot][east]],
+    edges[pivot][transforms[rotation][west]]:  oldPiece[edges[pivot][west]],
+    opposites[pivot]:                          oldPiece[opposites[pivot]],
+    pivot:                                     oldPiece[pivot],
   }
-
-  return newPiece
 }
 
 func(piece Piece) toString() string {
   s := ""
 
   for _, side := range sides {
-    face, ok := piece[side]
+    face := piece[side]
 
-    if ok {
+    if face != "" {
       s += string(face)
 
     } else {
@@ -172,10 +172,10 @@ func (cube Cube) isSolved() bool {
 func pieceIndex(piece Piece, side Side) int {
   i := 4
 
-  if _, ok := piece[edges[side][north]]; ok { i -= 3 }
-  if _, ok := piece[edges[side][east]];  ok { i += 1 }
-  if _, ok := piece[edges[side][south]]; ok { i += 3 }
-  if _, ok := piece[edges[side][west]];  ok { i -= 1 }
+  if piece[edges[side][north]] != "" { i -= 3 }
+  if piece[edges[side][east]]  != "" { i += 1 }
+  if piece[edges[side][south]] != "" { i += 3 }
+  if piece[edges[side][west]]  != "" { i -= 1 }
 
   return i
 }
@@ -184,9 +184,7 @@ func (cube Cube) piecesOn(side Side) [9]Piece {
   var pieces [9]Piece
 
   for _, piece := range cube {
-    _, ok := piece[side]
-
-    if ok {
+    if piece[side] != "" {
       i := pieceIndex(piece, side)
       pieces[i] = piece
     }
@@ -209,10 +207,7 @@ func (oldCube Cube) twist(side Side, direction Rotation) Cube {
   var newCube Cube
 
   for i, piece := range oldCube {
-    _, ok := piece[side]
-
-    // if +piece+ is on +side+.
-    if ok {
+    if piece[side] != "" {
       newCube[i] = piece.rotate(side, direction)
 
     } else {
